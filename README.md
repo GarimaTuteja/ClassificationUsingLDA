@@ -22,3 +22,6 @@ The Big Picture
 • To classify a new record, measure its distance from the center of each class
 • Then, classify the record to the closest class
 Here we can measure the distance with Euclidean distance,Mahalanobis Distance etc each has its own pros and cons.
+
+
+For code refer to the R markdown file(Rmd)
