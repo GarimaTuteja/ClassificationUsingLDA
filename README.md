@@ -19,8 +19,11 @@ LDA is a common technique used for supervised classification problems.It is a my
 With or without data normality assumption, we can arrive at the same LDA features, which explains its robustness.
 
 The Big Picture
+
 • To classify a new record, measure its distance from the center of each class
+
 • Then, classify the record to the closest class
+
 Here we can measure the distance with Euclidean distance,Mahalanobis Distance etc each has its own pros and cons.
 
 
