@@ -1,3 +1,8 @@
+---
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output: rmarkdown::github_document
+---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -44,7 +49,7 @@ spamnonspam.train <- spamnonspam[training.index, ]
 spamnonspam.valid <- spamnonspam[-training.index, ]
 ```
 
-To examine 10 predictors for which the difference between the spam-class average and NON-SPAM class average is highest we first have to filter the data into SPAM and NONSPAM based on the data which is provided then take the average values for each of the predictors in both the filtered datasets i.e for SPAM and NON-SPAM, and then we have to find the absolute difference between the averages as can be seen in the following code and then we can sort the difference and get the top 10 predictors which are required.
+1. To examine 10 predictors for which the difference between the spam-class average and NON-SPAM class average is highest we first have to filter the data into SPAM and NONSPAM based on the data which is provided then take the average values for each of the predictors in both the filtered datasets i.e for SPAM and NON-SPAM, and then we have to find the absolute difference between the averages as can be seen in the following code and then we can sort the difference and get the top 10 predictors which are required.
 The top 10 predictors are 
 ```{r Finding the top 10 variables}
 nonspam <- filter(spamnonspam.norm,class==0)
@@ -60,7 +65,7 @@ colnames(top10predictorsname) <-c("Top 10 predictors")
 top10predictorsname
 ```
 
-The following is LDA performed using the training dataset with the top 10 identified predictors identified above. We included only the identified predictors in the test and training dataset in the following code and trained the model using the training dataset.
+2. The following is LDA performed using the training dataset with the top 10 identified predictors identified above. We included only the identified predictors in the test and training dataset in the following code and trained the model using the training dataset.
 
 ```{r Run LDA Using top10 predictors}
 toppredictors <- names(top10predictors)
@@ -71,14 +76,14 @@ ldamodel <-lda(class~., data = pred.data.train)
 ldamodel
 ```
 
-Prior probability is the probability which is calculated from the frequency distribution of various classes present in the dataset. 
+3. Prior probability is the probability which is calculated from the frequency distribution of various classes present in the dataset. 
 
 ```{r Prior Probabiltiy}
 ldamodel$prior
 ```
 From above we can see prior probability of the email being Non Spam is 0.604 and Prior probability of the email being SPAM is 0.396,which we can see from the data that records which are classified as SPAM are 1813 out 4601, which has a relative frequency of 0.39 same goes for the Non SPAM records.
 
-Following is the linear discriminant
+4. Following is the linear discriminant
 ```{r Coefficient of linear discriminant}
 ldamodel$scaling
 
@@ -90,7 +95,7 @@ by the corresponding elements of the predictor variables and sum them (0.334727Ã
 we get a LD score for each observation. 
 
 
-Generate linear discriminants using your analysis. How are they used in classifying spams and non-spams?
+5. Generate linear discriminants using your analysis. How are they used in classifying spams and non-spams?
 
 ```{r Predcition }
 # Predcitions using validation dataset
@@ -101,10 +106,10 @@ head(spamnonspam.valid.pred$posterior,10)
 
 We can classify spams and nonspams on the basis posterior probability as it tells the the probability of an observation belonging to a class. For eg the first record in output has the probability of belonging to NONSPAM class is 0.632 and the probability of belonging to SPAM is 0.3677. So if we use the default 0.5 cut off then we can identify this email as NONSPAM.Same goes for the other observations
 
-There is only 1 LD in the model as the number of classes are 2, from the rule of thumb we can say that LD is number of classes -1. 
+6. There is only 1 LD in the model as the number of classes are 2, from the rule of thumb we can say that LD is number of classes -1. 
 
 
-Generate LDA plot using the training and validation data. What information is presented in these plots? How are they different?
+7. Generate LDA plot using the training and validation data. What information is presented in these plots? How are they different?
 
 
 From the plots below, we can see that the LDA plots for training and validation datasets were similar. The observations in the plots show distribution spam and non-spam class in the training and validation dataset. 
@@ -128,7 +133,7 @@ plot(ldamodel2)
 
 
 
-Generate the relevant confusion matrix. What are the sensitivity and specificity?
+8. Generate the relevant confusion matrix. What are the sensitivity and specificity?
 
 ```{r Confusion Matrix}
 predvsactual <- table(spamnonspam.valid.pred$class,spamnonspam.valid$class)  
@@ -138,7 +143,7 @@ confusionMatrix(predvsactual)
 Sensitivity is 0.949 & Specificity is 0.686 
 
 
-Generate lift and decile charts for the validation dataset and evaluate the effectiveness of the model in identifying spams.
+9. Generate lift and decile charts for the validation dataset and evaluate the effectiveness of the model in identifying spams.
 ```{r Lift Chart}
 gain <- gains(pred.data.valid$class,spamnonspam.valid.pred$x)
 plot(c(0,gain$cume.pct.of.total*sum(as.numeric(pred.data.valid$class)))
@@ -161,7 +166,7 @@ barplot(gain$mean.resp/mean(pred.data.valid$class), names.arg = gain$depth, spac
 
 
 
-For this part we have to change the cut off to 0.2 to see what impact does it have on the accuracy of our model.
+10. For this part we have to change the cut off to 0.2 to see what impact does it have on the accuracy of our model.
 On decreasing the probability threshold from 0.5 to 0.2 which means the probability of classifying the emails as spam will increase. Hence, the emails which were previously nonspam will now be classified as spam which means the false positive values will increase.
 ```{r}
 
